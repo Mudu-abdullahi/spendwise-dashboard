@@ -1,0 +1,360 @@
+
+/* =========================
+   CSS VARIABLES
+========================= */
+
+:root {
+    --brand-color: #2563eb;
+    --accent-color: #10b981;
+
+    --surface-color: #ffffff;
+    --background-color: #f4f7fb;
+
+    --primary-text: #1f2937;
+    --secondary-text: #6b7280;
+
+    --border-color: #e5e7eb;
+}
+
+
+/* =========================
+   GENERAL STYLES
+========================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: var(--background-color);
+    color: var(--primary-text);
+}
+
+
+/* =========================
+   MAIN DASHBOARD
+========================= */
+
+.dashboard {
+    min-height: 100vh;
+
+    display: grid;
+
+    grid-template-columns: 240px 1fr;
+}
+
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.sidebar {
+    background-color: var(--surface-color);
+
+    border-right: 1px solid var(--border-color);
+
+    padding: 30px 20px;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.logo {
+    margin-bottom: 40px;
+}
+
+.logo h2 {
+    color: var(--brand-color);
+}
+
+
+/* Sidebar Navigation */
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+}
+
+.sidebar-nav a {
+    text-decoration: none;
+
+    color: var(--secondary-text);
+
+    padding: 12px 15px;
+
+    border-radius: 8px;
+
+    transition:
+        background-color 200ms ease,
+        color 200ms ease;
+}
+
+.sidebar-nav a:hover {
+    background-color: #eff6ff;
+
+    color: var(--brand-color);
+}
+
+
+/* =========================
+   MAIN CONTENT
+========================= */
+
+.main-content {
+    min-width: 0;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.header {
+    background-color: var(--surface-color);
+
+    padding: 25px 35px;
+
+    border-bottom: 1px solid var(--border-color);
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+}
+
+.header h1 {
+    margin-bottom: 5px;
+}
+
+.header p {
+    color: var(--secondary-text);
+}
+
+.user-info {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    font-weight: 600;
+}
+
+
+/* =========================
+   DASHBOARD CONTENT
+========================= */
+
+.dashboard-content {
+    padding: 35px;
+}
+
+.section-title {
+    margin-bottom: 25px;
+}
+
+.section-title h2 {
+    margin-bottom: 5px;
+}
+
+.section-title p {
+    color: var(--secondary-text);
+}
+
+
+/* =========================
+   CARDS
+========================= */
+
+.cards {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 20px;
+}
+
+
+/* Individual Card */
+
+.card {
+    background-color: var(--surface-color);
+
+    border: 1px solid var(--border-color);
+
+    border-radius: 14px;
+
+    padding: 22px;
+
+    min-height: 190px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: space-between;
+
+    transition:
+        transform 200ms ease,
+        box-shadow 200ms ease;
+}
+
+
+/* Hover */
+
+.card:hover {
+    transform: translateY(-5px);
+
+    box-shadow:
+        0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+
+/* Keyboard Focus */
+
+.card:focus {
+    outline: 3px solid var(--brand-color);
+
+    outline-offset: 3px;
+
+    transform: translateY(-5px);
+
+    box-shadow:
+        0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+
+/* Card Top */
+
+.card-top {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+}
+
+.card-icon {
+    font-size: 28px;
+}
+
+.card-label {
+    font-weight: 600;
+}
+
+
+/* Card Content */
+
+.card-content {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 5px;
+}
+
+.card-content h3 {
+    font-size: 26px;
+}
+
+.card-content p {
+    color: var(--secondary-text);
+
+    font-size: 14px;
+}
+
+
+/* Card Bottom */
+
+.card-bottom {
+    display: flex;
+
+    justify-content: space-between;
+
+    color: var(--secondary-text);
+
+    font-size: 14px;
+}
+
+.card-bottom strong {
+    color: var(--primary-text);
+}
+
+
+/* =========================
+   RESPONSIVE DESIGN
+========================= */
+
+@media (max-width: 768px) {
+
+    .dashboard {
+        grid-template-columns: 1fr;
+    }
+
+
+    .sidebar {
+        border-right: none;
+
+        border-bottom: 1px solid var(--border-color);
+
+        padding: 20px;
+    }
+
+
+    .logo {
+        margin-bottom: 20px;
+    }
+
+
+    .sidebar-nav {
+        flex-direction: row;
+
+        flex-wrap: wrap;
+    }
+
+
+    .header {
+        padding: 20px;
+    }
+
+
+    .dashboard-content {
+        padding: 20px;
+    }
+
+
+    .cards {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* =========================
+   DARK THEME
+========================= */
+
+@media (prefers-color-scheme: dark) {
+
+    :root {
+        --brand-color: #60a5fa;
+
+        --accent-color: #34d399;
+
+        --surface-color: #1f2937;
+
+        --background-color: #111827;
+
+        --primary-text: #f9fafb;
+
+        --secondary-text: #9ca3af;
+
+        --border-color: #374151;
+    }
+}
+

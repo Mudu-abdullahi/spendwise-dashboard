@@ -1,10 +1,13 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>SpendWise Dashboard</title>
+
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -12,7 +15,10 @@
 
     <div class="dashboard">
 
-        <!-- Sidebar -->
+        <!-- =========================
+             SIDEBAR
+        ========================== -->
+
         <aside class="sidebar">
 
             <div class="logo">
@@ -31,15 +37,19 @@
         </aside>
 
 
-        <!-- Main Content -->
+        <!-- =========================
+             MAIN CONTENT
+        ========================== -->
+
         <main class="main-content">
 
             <!-- Header -->
+
             <header class="header">
 
                 <div>
                     <h1>Dashboard</h1>
-                    <p>Welcome back! Here's your spending overview.</p>
+                    <p>Manage your budget and track your expenses.</p>
                 </div>
 
                 <div class="user-info">
@@ -50,142 +60,223 @@
             </header>
 
 
-            <!-- Dashboard Content -->
+            <!-- =========================
+                 DASHBOARD CONTENT
+            ========================== -->
+
             <section class="dashboard-content">
 
-                <div class="section-title">
-                    <h2>Spending Categories</h2>
-                    <p>Track your spending across different categories.</p>
+                <!-- Budget Input -->
+
+                <div class="budget-section">
+
+                    <h2>Set Your Monthly Budget</h2>
+
+                    <form id="budgetForm">
+
+                        <label for="budgetInput">
+                            Monthly Budget
+                        </label>
+
+                        <input
+                            type="number"
+                            id="budgetInput"
+                            placeholder="Enter your budget"
+                            min="0"
+                            required
+                        >
+
+                        <button type="submit">
+                            Set Budget
+                        </button>
+
+                    </form>
+
                 </div>
 
 
-                <!-- Financial Cards -->
+                <!-- =========================
+                     SUMMARY CARDS
+                ========================== -->
+
                 <div class="cards">
 
-                    <!-- Food -->
-                    <article class="card" tabindex="0">
-
-                        <div class="card-top">
-                            <span class="card-icon">🍔</span>
-                            <span class="card-label">Food</span>
-                        </div>
-
-                        <div class="card-content">
-                            <h3>KSh 8,500</h3>
-                            <p>Monthly spending</p>
-                        </div>
-
-                        <div class="card-bottom">
-                            <span>Budget</span>
-                            <strong>KSh 10,000</strong>
-                        </div>
-
-                    </article>
-
-
-                    <!-- Transport -->
-                    <article class="card" tabindex="0">
-
-                        <div class="card-top">
-                            <span class="card-icon">🚗</span>
-                            <span class="card-label">Transport</span>
-                        </div>
-
-                        <div class="card-content">
-                            <h3>KSh 5,200</h3>
-                            <p>Monthly spending</p>
-                        </div>
-
-                        <div class="card-bottom">
-                            <span>Budget</span>
-                            <strong>KSh 7,000</strong>
-                        </div>
-
-                    </article>
-
-
-                    <!-- Rent -->
-                    <article class="card" tabindex="0">
-
-                        <div class="card-top">
-                            <span class="card-icon">🏠</span>
-                            <span class="card-label">Rent</span>
-                        </div>
-
-                        <div class="card-content">
-                            <h3>KSh 25,000</h3>
-                            <p>Monthly spending</p>
-                        </div>
-
-                        <div class="card-bottom">
-                            <span>Budget</span>
-                            <strong>KSh 25,000</strong>
-                        </div>
-
-                    </article>
-
-
-                    <!-- Entertainment -->
-                    <article class="card" tabindex="0">
-
-                        <div class="card-top">
-                            <span class="card-icon">🎬</span>
-                            <span class="card-label">Entertainment</span>
-                        </div>
-
-                        <div class="card-content">
-                            <h3>KSh 3,500</h3>
-                            <p>Monthly spending</p>
-                        </div>
-
-                        <div class="card-bottom">
-                            <span>Budget</span>
-                            <strong>KSh 5,000</strong>
-                        </div>
-
-                    </article>
-
-
-                    <!-- Savings -->
-                    <article class="card" tabindex="0">
+                    <article class="card">
 
                         <div class="card-top">
                             <span class="card-icon">💰</span>
-                            <span class="card-label">Savings</span>
+                            <span class="card-label">
+                                Monthly Budget
+                            </span>
                         </div>
 
                         <div class="card-content">
-                            <h3>KSh 12,000</h3>
-                            <p>Monthly savings</p>
-                        </div>
 
-                        <div class="card-bottom">
-                            <span>Goal</span>
-                            <strong>KSh 15,000</strong>
+                            <h3 id="budgetDisplay">
+                                KSh 0
+                            </h3>
+
+                            <p>Your monthly budget</p>
+
                         </div>
 
                     </article>
 
 
-                    <!-- Utilities -->
-                    <article class="card" tabindex="0">
+                    <article class="card">
 
                         <div class="card-top">
-                            <span class="card-icon">💡</span>
-                            <span class="card-label">Utilities</span>
+                            <span class="card-icon">💳</span>
+                            <span class="card-label">
+                                Total Expenses
+                            </span>
                         </div>
 
                         <div class="card-content">
-                            <h3>KSh 4,800</h3>
-                            <p>Monthly spending</p>
-                        </div>
 
-                        <div class="card-bottom">
-                            <span>Budget</span>
-                            <strong>KSh 6,000</strong>
+                            <h3 id="expenseDisplay">
+                                KSh 0
+                            </h3>
+
+                            <p>Total money spent</p>
+
                         </div>
 
                     </article>
+
+
+                    <article class="card">
+
+                        <div class="card-top">
+                            <span class="card-icon">📊</span>
+                            <span class="card-label">
+                                Remaining Balance
+                            </span>
+
+                        </div>
+
+                        <div class="card-content">
+
+                            <h3 id="balanceDisplay">
+                                KSh 0
+                            </h3>
+
+                            <p>Money remaining</p>
+
+                        </div>
+
+                    </article>
+
+                </div>
+
+
+                <!-- =========================
+                     BUDGET STATUS
+                ========================== -->
+
+                <div class="status-card">
+
+                    <h2>Budget Status</h2>
+
+                    <p id="statusMessage">
+                        Set your budget to begin.
+                    </p>
+
+                </div>
+
+
+                <!-- =========================
+                     ADD EXPENSE
+                ========================== -->
+
+                <div class="expense-section">
+
+                    <h2>Add Expense</h2>
+
+                    <form id="expenseForm">
+
+                        <div class="form-group">
+
+                            <label for="categoryInput">
+                                Category
+                            </label>
+
+                            <select id="categoryInput" required>
+
+                                <option value="">
+                                    Select category
+                                </option>
+
+                                <option value="Food">
+                                    Food
+                                </option>
+
+                                <option value="Transport">
+                                    Transport
+                                </option>
+
+                                <option value="Rent">
+                                    Rent
+                                </option>
+
+                                <option value="Entertainment">
+                                    Entertainment
+                                </option>
+
+                                <option value="Savings">
+                                    Savings
+                                </option>
+
+                                <option value="Utilities">
+                                    Utilities
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="amountInput">
+                                Amount
+                            </label>
+
+                            <input
+                                type="number"
+                                id="amountInput"
+                                placeholder="Enter amount"
+                                min="0"
+                                required
+                            >
+
+                        </div>
+
+
+                        <button type="submit">
+                            Add Expense
+                        </button>
+
+                    </form>
+
+                </div>
+
+
+                <!-- =========================
+                     EXPENSE LIST
+                ========================== -->
+
+                <div class="expense-list-section">
+
+                    <h2>Expense Records</h2>
+
+                    <div id="expenseList">
+
+                        <p>
+                            No expenses added yet.
+                        </p>
+
+                    </div>
 
                 </div>
 
@@ -194,8 +285,12 @@
         </main>
 
     </div>
+
+
+    <!-- JavaScript -->
+
     <script src="script.js"></script>
 
 </body>
-</html>
 
+</html>

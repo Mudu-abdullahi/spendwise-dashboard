@@ -1,104 +1,216 @@
 
 // ========================================
-// SpendWise - JavaScript Foundation
+// SPENDWISE INTERACTIVE DASHBOARD
 // ========================================
 
 
 // ========================================
-// 1. COLLECT USER INPUT
+// 1. SELECT HTML ELEMENTS
 // ========================================
 
-// Ask the user for their monthly budget
-let monthlyBudget = Number(
-    prompt("Enter your monthly budget:")
-);
+const budgetForm = document.querySelector("#budgetForm");
 
-// Ask the user for their expenses
-let foodExpense = Number(
-    prompt("Enter your food expense:")
-);
+const budgetInput = document.querySelector("#budgetInput");
 
-let transportExpense = Number(
-    prompt("Enter your transport expense:")
-);
+const budgetDisplay = document.querySelector("#budgetDisplay");
 
-let rentExpense = Number(
-    prompt("Enter your rent expense:")
-);
+const expenseForm = document.querySelector("#expenseForm");
 
-let entertainmentExpense = Number(
-    prompt("Enter your entertainment expense:")
-);
+const categoryInput = document.querySelector("#categoryInput");
 
-let utilitiesExpense = Number(
-    prompt("Enter your utilities expense:")
-);
+const amountInput = document.querySelector("#amountInput");
+
+const expenseDisplay = document.querySelector("#expenseDisplay");
+
+const balanceDisplay = document.querySelector("#balanceDisplay");
+
+const statusMessage = document.querySelector("#statusMessage");
+
+const expenseList = document.querySelector("#expenseList");
 
 
 // ========================================
-// 2. FUNCTIONS
+// 2. APPLICATION DATA
 // ========================================
 
-// Calculate total expenses
-function calculateTotalExpenses(
-    food,
-    transport,
-    rent,
-    entertainment,
-    utilities
-) {
-    return food + transport + rent + entertainment + utilities;
+// Store the user's monthly budget
+let monthlyBudget = 0;
+
+// Store expense records in an array
+let expenses = [];
+
+
+// ========================================
+// 3. BUDGET FORM EVENT
+// ========================================
+
+budgetForm.addEventListener("submit", function (event) {
+
+    // Stop the page from refreshing
+    event.preventDefault();
+
+    // Get the budget entered by the user
+    monthlyBudget = Number(budgetInput.value);
+
+    // Display the budget on the dashboard
+    budgetDisplay.textContent = `KSh ${monthlyBudget}`;
+
+    // Update all dashboard information
+    updateDashboard();
+
+    // Clear the input field
+    budgetInput.value = "";
+});
+
+
+// ========================================
+// 4. EXPENSE FORM EVENT
+// ========================================
+
+expenseForm.addEventListener("submit", function (event) {
+
+    // Stop the page from refreshing
+    event.preventDefault();
+
+    // Get values from the form
+    const category = categoryInput.value;
+    const amount = Number(amountInput.value);
+
+
+    // Create an expense record
+    const expense = {
+        category: category,
+        amount: amount
+    };
+
+
+    // Add the expense to the array
+    expenses.push(expense);
+
+
+    // Clear the form
+    categoryInput.value = "";
+    amountInput.value = "";
+
+
+    // Update the dashboard
+    updateDashboard();
+});
+
+
+// ========================================
+// 5. CALCULATE TOTAL EXPENSES
+// ========================================
+
+function calculateTotalExpenses() {
+
+    // Start total at zero
+    let total = 0;
+
+
+    // Loop through every expense
+    for (let expense of expenses) {
+
+        // Add each expense amount to total
+        total += expense.amount;
+    }
+
+
+    // Return the final total
+    return total;
 }
 
 
-// Calculate remaining balance
-function calculateRemainingBalance(budget, expenses) {
-    return budget - expenses;
+// ========================================
+// 6. UPDATE DASHBOARD
+// ========================================
+
+function updateDashboard() {
+
+    // Calculate total expenses
+    const totalExpenses = calculateTotalExpenses();
+
+    // Calculate remaining balance
+    const remainingBalance = monthlyBudget - totalExpenses;
+
+
+    // Update total expenses on the page
+    expenseDisplay.textContent = `KSh ${totalExpenses}`;
+
+
+    // Update remaining balance on the page
+    balanceDisplay.textContent = `KSh ${remainingBalance}`;
+
+
+    // ========================================
+    // BUDGET CONDITIONS
+    // ========================================
+
+    if (monthlyBudget === 0) {
+
+        statusMessage.textContent =
+            "Please set your monthly budget.";
+
+    } else if (remainingBalance > 0) {
+
+        statusMessage.textContent =
+            "✅ You are within your budget.";
+
+    } else if (remainingBalance === 0) {
+
+        statusMessage.textContent =
+            "⚠️ You have used your entire budget.";
+
+    } else {
+
+        statusMessage.textContent =
+            "❌ You have exceeded your budget.";
+    }
+
+
+    // Display expense records
+    displayExpenses();
 }
 
 
 // ========================================
-// 3. PERFORM CALCULATIONS
+// 7. DISPLAY EXPENSE RECORDS
 // ========================================
 
-let totalExpenses = calculateTotalExpenses(
-    foodExpense,
-    transportExpense,
-    rentExpense,
-    entertainmentExpense,
-    utilitiesExpense
-);
+function displayExpenses() {
 
-let remainingBalance = calculateRemainingBalance(
-    monthlyBudget,
-    totalExpenses
-);
+    // Clear the existing expense list
+    expenseList.innerHTML = "";
 
 
-// ========================================
-// 4. DISPLAY RESULTS
-// ========================================
+    // Check if there are no expenses
+    if (expenses.length === 0) {
 
-console.log("===== SpendWise Budget Report =====");
+        expenseList.innerHTML =
+            "<p>No expenses added yet.</p>";
 
-console.log(`Monthly Budget: KSh ${monthlyBudget}`);
-
-console.log(`Total Expenses: KSh ${totalExpenses}`);
-
-console.log(`Remaining Balance: KSh ${remainingBalance}`);
+        return;
+    }
 
 
-// ========================================
-// 5. CHECK BUDGET STATUS
-// ========================================
+    // Loop through the expense array
+    for (let expense of expenses) {
 
-if (remainingBalance > 0) {
-    console.log("Status: You are within your budget.");
-} else if (remainingBalance === 0) {
-    console.log("Status: You have used your entire budget.");
-} else {
-    console.log("Status: You have exceeded your budget.");
+        // Create a new div for the expense
+        const expenseItem = document.createElement("div");
+
+        // Add CSS class
+        expenseItem.classList.add("expense-item");
+
+
+        // Add expense information
+        expenseItem.innerHTML = `
+            <span>${expense.category}</span>
+            <strong>KSh ${expense.amount}</strong>
+        `;
+
+
+        // Add the expense to the webpage
+        expenseList.appendChild(expenseItem);
+    }
 }
-
-console.log("===================================");
-

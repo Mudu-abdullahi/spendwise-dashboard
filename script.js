@@ -3,214 +3,264 @@
 // SPENDWISE INTERACTIVE DASHBOARD
 // ========================================
 
-
-// ========================================
 // 1. SELECT HTML ELEMENTS
-// ========================================
 
 const budgetForm = document.querySelector("#budgetForm");
-
 const budgetInput = document.querySelector("#budgetInput");
-
 const budgetDisplay = document.querySelector("#budgetDisplay");
 
 const expenseForm = document.querySelector("#expenseForm");
-
 const categoryInput = document.querySelector("#categoryInput");
-
 const amountInput = document.querySelector("#amountInput");
 
 const expenseDisplay = document.querySelector("#expenseDisplay");
-
 const balanceDisplay = document.querySelector("#balanceDisplay");
-
 const statusMessage = document.querySelector("#statusMessage");
-
 const expenseList = document.querySelector("#expenseList");
 
 
-// ========================================
 // 2. APPLICATION DATA
-// ========================================
 
-// Store the user's monthly budget
 let monthlyBudget = 0;
 
-// Store expense records in an array
 let expenses = [];
 
 
-// ========================================
-// 3. BUDGET FORM EVENT
-// ========================================
+// 3. FORMAT CURRENCY
+
+function formatCurrency(amount) {
+    return `KSh ${amount.toLocaleString("en-KE", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    })}`;
+}
+
+
+// 4. BUDGET FORM EVENT
 
 budgetForm.addEventListener("submit", function (event) {
 
-    // Stop the page from refreshing
     event.preventDefault();
 
-    // Get the budget entered by the user
-    monthlyBudget = Number(budgetInput.value);
+    const budget = Number(budgetInput.value);
 
-    // Display the budget on the dashboard
-    budgetDisplay.textContent = `KSh ${monthlyBudget}`;
+    // Validate budget
 
-    // Update all dashboard information
-    updateDashboard();
+    if (!Number.isFinite(budget) || budget <= 0) {
+        statusMessage.textContent =
+            "Please enter a valid budget greater than zero.";
+        return;
+    }
 
-    // Clear the input field
+    monthlyBudget = budget;
+
+    budgetDisplay.textContent = formatCurrency(monthlyBudget);
+
     budgetInput.value = "";
+
+    updateDashboard();
 });
 
 
-// ========================================
-// 4. EXPENSE FORM EVENT
-// ========================================
+// 5. EXPENSE FORM EVENT
 
 expenseForm.addEventListener("submit", function (event) {
 
-    // Stop the page from refreshing
     event.preventDefault();
 
-    // Get values from the form
-    const category = categoryInput.value;
+    const category = categoryInput.value.trim();
+
     const amount = Number(amountInput.value);
 
+    // Validate expense
 
-    // Create an expense record
+    if (!category || !Number.isFinite(amount) || amount <= 0) {
+        statusMessage.textContent =
+            "Please enter a valid category and expense amount.";
+        return;
+    }
+
+    // Create expense object
+
     const expense = {
+        id: Date.now() + Math.random(),
         category: category,
         amount: amount
     };
 
+    // Store expense in array
 
-    // Add the expense to the array
     expenses.push(expense);
 
+    // Clear form
 
-    // Clear the form
     categoryInput.value = "";
     amountInput.value = "";
 
-
-    // Update the dashboard
     updateDashboard();
 });
 
 
-// ========================================
-// 5. CALCULATE TOTAL EXPENSES
-// ========================================
+// 6. CALCULATE TOTAL EXPENSES
 
 function calculateTotalExpenses() {
 
-    // Start total at zero
     let total = 0;
 
+    // Process all expense records
 
-    // Loop through every expense
     for (let expense of expenses) {
 
-        // Add each expense amount to total
         total += expense.amount;
+
     }
 
-
-    // Return the final total
     return total;
 }
 
 
-// ========================================
-// 6. UPDATE DASHBOARD
-// ========================================
+// 7. UPDATE DASHBOARD
 
 function updateDashboard() {
 
-    // Calculate total expenses
     const totalExpenses = calculateTotalExpenses();
 
-    // Calculate remaining balance
     const remainingBalance = monthlyBudget - totalExpenses;
 
+    // Update dashboard figures
 
-    // Update total expenses on the page
-    expenseDisplay.textContent = `KSh ${totalExpenses}`;
+    expenseDisplay.textContent =
+        formatCurrency(totalExpenses);
+
+    balanceDisplay.textContent =
+        formatCurrency(remainingBalance);
 
 
-    // Update remaining balance on the page
-    balanceDisplay.textContent = `KSh ${remainingBalance}`;
-
-
-    // ========================================
-    // BUDGET CONDITIONS
-    // ========================================
+    // Budget decision making
 
     if (monthlyBudget === 0) {
 
         statusMessage.textContent =
             "Please set your monthly budget.";
 
-    } else if (remainingBalance > 0) {
+    } else if (remainingBalance < 0) {
 
         statusMessage.textContent =
-            "✅ You are within your budget.";
+            "You have exceeded your budget!";
 
     } else if (remainingBalance === 0) {
 
         statusMessage.textContent =
-            "⚠️ You have used your entire budget.";
+            "You have used your entire budget.";
+
+    } else if (totalExpenses >= monthlyBudget * 0.8) {
+
+        statusMessage.textContent =
+            "Warning! You have used 80% or more of your budget.";
 
     } else {
 
         statusMessage.textContent =
-            "❌ You have exceeded your budget.";
+            "You are within your budget. Keep saving!";
     }
 
+    // Refresh expense records
 
-    // Display expense records
     displayExpenses();
 }
 
 
-// ========================================
-// 7. DISPLAY EXPENSE RECORDS
-// ========================================
+// 8. DISPLAY EXPENSE RECORDS
 
 function displayExpenses() {
 
-    // Clear the existing expense list
+    // Clear previous records
+
     expenseList.innerHTML = "";
 
+    // Check if array is empty
 
-    // Check if there are no expenses
     if (expenses.length === 0) {
 
-        expenseList.innerHTML =
-            "<p>No expenses added yet.</p>";
+        const message = document.createElement("p");
+
+        message.textContent = "No expenses added yet.";
+
+        expenseList.appendChild(message);
 
         return;
     }
 
+    // Loop through expenses
 
-    // Loop through the expense array
     for (let expense of expenses) {
 
-        // Create a new div for the expense
         const expenseItem = document.createElement("div");
 
-        // Add CSS class
         expenseItem.classList.add("expense-item");
 
+        // Expense category
 
-        // Add expense information
-        expenseItem.innerHTML = `
-            <span>${expense.category}</span>
-            <strong>KSh ${expense.amount}</strong>
-        `;
+        const category = document.createElement("span");
 
+        category.textContent = expense.category;
 
-        // Add the expense to the webpage
+        // Expense amount
+
+        const amount = document.createElement("strong");
+
+        amount.textContent = formatCurrency(expense.amount);
+
+        // Delete button
+
+        const deleteButton = document.createElement("button");
+
+        deleteButton.textContent = "Delete";
+
+        deleteButton.type = "button";
+
+        deleteButton.classList.add("delete-expense");
+
+        deleteButton.dataset.id = expense.id;
+
+        // Add elements to expense item
+
+        expenseItem.appendChild(category);
+
+        expenseItem.appendChild(amount);
+
+        expenseItem.appendChild(deleteButton);
+
+        // Add item to webpage
+
         expenseList.appendChild(expenseItem);
     }
 }
+
+
+// 9. DELETE EXPENSE EVENT
+
+expenseList.addEventListener("click", function (event) {
+
+    if (event.target.classList.contains("delete-expense")) {
+
+        const expenseId = Number(event.target.dataset.id);
+
+        // Remove selected expense from array
+
+        expenses = expenses.filter(function (expense) {
+
+            return expense.id !== expenseId;
+
+        });
+
+        // Refresh dashboard
+
+        updateDashboard();
+    }
+});
+
+
+// 10. INITIAL DASHBOARD DISPLAY
+
+updateDashboard();
